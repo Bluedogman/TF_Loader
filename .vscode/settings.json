@@ -1,5 +1,8 @@
 {
   "python.analysis.autoFormatStrings": false,
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": null
+  "editor.defaultFormatter": null,
+  "cSpell.words": [
+    "xhamster"
+  ]
 }

@@ -1,0 +1,2 @@
+Uhm, tf2 has no mod loader for super pretty mod management... so I wanted to help visualize your mods, and possibly make downloading them easier but currently
+there is nothing that incorporates it with sites like xhamster,  nexus or ... whatever site you get your mods from.
