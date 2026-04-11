@@ -15,7 +15,7 @@ from PyQt6.QtWidgets import (
 )
 
 
-class Mod:  # Is this a bad name?
+class Mod:  # The data that will be displayed when viewing a mod
     def __init__(
         self, name: str, files: Optional[list[Path]] = None, description: str = ""
     ) -> None:
@@ -56,7 +56,7 @@ def toggle_mod(mods: list[Mod], user_input: str):
     print("well shoot, it looks like I didn't find it")
 
 
-class TFLoaderApp(QMainWindow):
+class TFLoaderApp:
     def __init__(
         self,
         script_path: Path,
@@ -76,17 +76,12 @@ class TFLoaderApp(QMainWindow):
         self.name = self.config.get("username")
         self.custom_path = Path(self.config.get("tf_custom_path"))
         self.mods: dict[str, Mod] = {}
-        self.app = QApplication([])
-        uic.loadUi("UI/MainWindow.ui", self)  # type: ignore IHATEIHATEIHATEHATEYOU
-        uic.loadUi("UI/Mod_widget.ui", self)  # type: ignore IHATEIHATEIHATEHATEYOU
 
     def run(self):
         if not (self.script_path / "coconut.jpeg").exists():
             self.close()
         self.running = True
         self.load_tf_custom()
-        self.show()
-        self.app.exec()
         while self.running:
             user_input = input(f"[{self.name}]$ ").strip()
             if user_input == "q" or user_input == "quit":
