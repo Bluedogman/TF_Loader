@@ -2,7 +2,17 @@
 from pathlib import Path
 import sys, json
 from typing import Optional
-import PyQt5 as Qt  # TODO: Upgrade to PyQt6 ASAP
+
+from PyQt6 import QtCore, QtGui, QtWidgets, uic
+from PyQt6.QtGui import QAction, QIcon, QKeySequence
+from PyQt6.QtWidgets import (
+    QApplication,
+    QCheckBox,
+    QLabel,
+    QMainWindow,
+    QStatusBar,
+    QToolBar,
+)
 
 
 class Mod:  # Is this a bad name?
@@ -46,13 +56,14 @@ def toggle_mod(mods: list[Mod], user_input: str):
     print("well shoot, it looks like I didn't find it")
 
 
-class TFLoaderApp:
+class TFLoaderApp(QMainWindow):
     def __init__(
         self,
         script_path: Path,
         config_path: Path,
         disabled_path: Path,
     ) -> None:
+        super().__init__()
         self.script_path = script_path
         self.config_path = config_path
         self.disabled_path = disabled_path
@@ -65,12 +76,17 @@ class TFLoaderApp:
         self.name = self.config.get("username")
         self.custom_path = Path(self.config.get("tf_custom_path"))
         self.mods: dict[str, Mod] = {}
+        self.app = QApplication([])
+        uic.loadUi("UI/MainWindow.ui", self)  # type: ignore IHATEIHATEIHATEHATEYOU
+        uic.loadUi("UI/Mod_widget.ui", self)  # type: ignore IHATEIHATEIHATEHATEYOU
 
     def run(self):
         if not (self.script_path / "coconut.jpeg").exists():
             self.close()
         self.running = True
         self.load_tf_custom()
+        self.show()
+        self.app.exec()
         while self.running:
             user_input = input(f"[{self.name}]$ ").strip()
             if user_input == "q" or user_input == "quit":
@@ -159,9 +175,9 @@ def main():
     config_path = script_path / "config.json"
     disabled_path = script_path / "mods/"
 
-    app = TFLoaderApp(script_path, config_path, disabled_path)
+    App_manager = TFLoaderApp(script_path, config_path, disabled_path)
     # try:
-    app.run()
+    App_manager.run()
     # except:
     #     app.close()
 
