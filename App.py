@@ -3,16 +3,37 @@ from pathlib import Path
 import sys, json
 from typing import Optional
 
-from PyQt6 import QtCore, QtGui, QtWidgets, uic
-from PyQt6.QtGui import QAction, QIcon, QKeySequence
+from PyQt6 import uic, QtWidgets
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import (
-    QApplication,
-    QCheckBox,
+    QWidget,
+    QFileDialog,
     QLabel,
     QMainWindow,
     QStatusBar,
     QToolBar,
 )
+
+
+class QWindowManager(QMainWindow):
+    def __init__(self) -> None:
+        super().__init__()
+        self.setWindowTitle("TFLoader")
+        uic.loadUi("UI/MainWindow.ui", self)  # type: ignore
+        self.AddModButton.clicked.connect(self.open_file_manager)  # type: ignore
+        self.show()
+
+    def instantiate_tile(self, mod: Mod):
+        pass
+
+
+class ModButton(QWidget):
+    def __init__(self, title) -> None:
+        super().__init__()
+        uic.loadUi("UI/Tile_Widget.ui", self)  # type: ignore
+        print(dir(self))
+        self.pixmap = QPixmap("assets/earth_chan.webp")
+        self.ModTitle.setPixmap(self.pixmap)  # type: ignore
 
 
 class Mod:  # The data that will be displayed when viewing a mod
@@ -78,7 +99,7 @@ class TFLoaderApp:
         self.mods: dict[str, Mod] = {}
 
     def run(self):
-        if not (self.script_path / "coconut.jpeg").exists():
+        if not (self.script_path / "assets/coconut.jpeg").exists():
             self.close()
         self.running = True
         self.load_tf_custom()
@@ -171,6 +192,8 @@ def main():
     disabled_path = script_path / "mods/"
 
     App_manager = TFLoaderApp(script_path, config_path, disabled_path)
+    QApp = QtWidgets.QApplication(sys.argv)
+    Window_manager = QWindowManager()
     # try:
     App_manager.run()
     # except:
